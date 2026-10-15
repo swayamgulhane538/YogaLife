@@ -15,6 +15,7 @@ import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Colors, Shadows } from '@/constants/theme';
 import { useLanguageStore } from '@/stores/languageStore';
 import { useProgressStore } from '@/stores/progressStore';
+import { useAuthStore } from '@/stores/authStore';
 import { yogaPoses, getPoseById } from '@/data/poses';
 import { ThemedCard } from '@/components/ui/ThemedCard';
 import { PremiumButton } from '@/components/ui/PremiumButton';
@@ -22,6 +23,7 @@ import { LanguageSelector } from '@/components/ui/LanguageSelector';
 
 export default function HomeScreen() {
   const { t, language } = useLanguageStore();
+  const { user, isLoggedIn } = useAuthStore();
   const currentStreak = useProgressStore((state) => state.currentStreak);
   const getTodayPracticeTime = useProgressStore((state) => state.getTodayPracticeTime);
   const history = useProgressStore((state) => state.history);
@@ -73,7 +75,29 @@ export default function HomeScreen() {
             <Text style={styles.greetingSub}>{t(greeting.en, greeting.hi)} 🌿</Text>
             <Text style={styles.greetingTitle}>YogaLife</Text>
           </View>
-          <LanguageSelector variant="compact" />
+          <View style={styles.headerRight}>
+            <LanguageSelector variant="compact" />
+            <TouchableOpacity
+              style={styles.profileBadge}
+              onPress={() => {
+                if (isLoggedIn && user && !user.isGuest) {
+                  router.push('/(tabs)/settings');
+                } else {
+                  router.push('/login' as any);
+                }
+              }}
+              accessibilityLabel={t('User Profile / Login', 'उपयोगकर्ता प्रोफ़ाइल / लॉगिन')}
+              activeOpacity={0.7}
+            >
+              {isLoggedIn && user && !user.isGuest ? (
+                <Text style={styles.profileInitial}>
+                  {user.name.charAt(0).toUpperCase()}
+                </Text>
+              ) : (
+                <Ionicons name="person-outline" size={17} color={Colors.deepForest} />
+              )}
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Stats Row: Streak & Today's Practice */}
@@ -342,6 +366,27 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: Colors.deepForest,
     letterSpacing: -0.5,
+  },
+  headerRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  profileBadge: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1.5,
+    borderColor: '#C8E6C9',
+    justifyContent: 'center',
+    alignItems: 'center',
+    ...Shadows.sm,
+  },
+  profileInitial: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: Colors.deepForest,
   },
   statsRow: {
     flexDirection: 'row',

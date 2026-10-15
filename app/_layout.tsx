@@ -10,6 +10,7 @@ import { useLanguageStore } from '@/stores/languageStore';
 import { useProgressStore } from '@/stores/progressStore';
 import { useFavoritesStore } from '@/stores/favoritesStore';
 import { useSettingsStore } from '@/stores/settingsStore';
+import { useAuthStore } from '@/stores/authStore';
 import { Colors } from '@/constants/theme';
 
 import { Platform } from 'react-native';
@@ -26,6 +27,7 @@ export default function RootLayout() {
   const loadProgress = useProgressStore((state) => state.loadProgress);
   const loadFavorites = useFavoritesStore((state) => state.loadFavorites);
   const loadSettings = useSettingsStore((state) => state.loadSettings);
+  const loadUser = useAuthStore((state) => state.loadUser);
 
   useEffect(() => {
     async function prepare() {
@@ -35,6 +37,7 @@ export default function RootLayout() {
           loadProgress(),
           loadFavorites(),
           loadSettings(),
+          loadUser(),
         ]);
       } catch (e) {
         console.warn('Error loading initial app state:', e);
@@ -91,6 +94,14 @@ export default function RootLayout() {
               headerShown: false,
               presentation: 'card',
               animation: 'slide_from_right',
+            }}
+          />
+          <Stack.Screen
+            name="login"
+            options={{
+              headerShown: false,
+              presentation: 'modal',
+              animation: 'slide_from_bottom',
             }}
           />
         </Stack>

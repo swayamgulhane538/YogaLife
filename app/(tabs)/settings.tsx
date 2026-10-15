@@ -12,9 +12,11 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+import { router } from 'expo-router';
 import { Colors, Shadows } from '@/constants/theme';
 import { useLanguageStore } from '@/stores/languageStore';
 import { useSettingsStore } from '@/stores/settingsStore';
+import { useAuthStore } from '@/stores/authStore';
 import { LanguageSelector } from '@/components/ui/LanguageSelector';
 import { scheduleYogaReminder, cancelAllReminders } from '@/components/alarm/AlarmScheduler';
 import {
@@ -25,6 +27,24 @@ import {
 
 export default function SettingsScreen() {
   const { t, language } = useLanguageStore();
+  const { user, isLoggedIn, logout } = useAuthStore();
+
+  const handleLogout = () => {
+    Alert.alert(
+      t('Log Out', 'लॉगआउट'),
+      t('Are you sure you want to log out?', 'क्या आप वाकई लॉगआउट करना चाहते हैं?'),
+      [
+        { text: t('Cancel', 'रद्द करें'), style: 'cancel' },
+        {
+          text: t('Log Out', 'लॉगआउट'),
+          style: 'destructive',
+          onPress: async () => {
+            await logout();
+          },
+        },
+      ]
+    );
+  };
 
   const {
     voiceSpeed,
@@ -156,6 +176,75 @@ export default function SettingsScreen() {
           <Text style={styles.screenSubtitle}>
             {t('Customize your yoga practice & experience', 'अपनी योग साधना और प्राथमिकताओं को अनुकूलित करें')}
           </Text>
+        </View>
+
+        {/* Section 0: Account / Profile Card */}
+        <View style={styles.accountCard}>
+          <View style={styles.accountCardContent}>
+            <View style={styles.accountAvatar}>
+              {isLoggedIn && user && !user.isGuest ? (
+                <Text style={styles.accountAvatarText}>
+                  {user.name.charAt(0).toUpperCase()}
+                </Text>
+              ) : (
+                <Ionicons name="person-outline" size={24} color={Colors.deepForest} />
+              )}
+            </View>
+
+            <View style={styles.accountInfo}>
+              <View style={styles.accountNameRow}>
+                <Text style={styles.accountName}>
+                  {isLoggedIn && user && !user.isGuest
+                    ? user.name
+                    : t('Guest Yogi', 'अतिथि योगी')}
+                </Text>
+                <View
+                  style={[
+                    styles.accountBadge,
+                    isLoggedIn && user && !user.isGuest
+                      ? styles.accountBadgeMember
+                      : styles.accountBadgeGuest,
+                  ]}
+                >
+                  <Text style={styles.accountBadgeText}>
+                    {isLoggedIn && user && !user.isGuest
+                      ? t('Yogi', 'योगी 🌿')
+                      : t('Guest', 'अतिथि')}
+                  </Text>
+                </View>
+              </View>
+
+              <Text style={styles.accountEmail}>
+                {isLoggedIn && user && !user.isGuest
+                  ? user.email
+                  : t('Sign in to sync your practice & streaks', 'प्रगति सुरक्षित करने हेतु लॉगिन करें')}
+              </Text>
+            </View>
+          </View>
+
+          <View style={styles.accountActionDivider} />
+
+          {isLoggedIn && user && !user.isGuest ? (
+            <TouchableOpacity
+              style={styles.logoutBtn}
+              onPress={handleLogout}
+              activeOpacity={0.7}
+            >
+              <Ionicons name="log-out-outline" size={18} color="#D32F2F" />
+              <Text style={styles.logoutBtnText}>{t('Log Out', 'लॉगआउट करें')}</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity
+              style={styles.loginCtaBtn}
+              onPress={() => router.push('/login' as any)}
+              activeOpacity={0.8}
+            >
+              <Ionicons name="log-in-outline" size={18} color="#FFFFFF" />
+              <Text style={styles.loginCtaBtnText}>
+                {t('Sign In / Register 🌿', 'साइन इन / रजिस्टर करें 🌿')}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
 
         {/* Section 1: Language */}
@@ -647,5 +736,100 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: Colors.textMuted,
     fontStyle: 'italic',
+  },
+  accountCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    padding: 18,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: '#E8F2E8',
+    ...Shadows.md,
+  },
+  accountCardContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 14,
+  },
+  accountAvatar: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    backgroundColor: '#E8F5E9',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1.5,
+    borderColor: Colors.sageGreen,
+  },
+  accountAvatarText: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: Colors.deepForest,
+  },
+  accountInfo: {
+    flex: 1,
+  },
+  accountNameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 3,
+  },
+  accountName: {
+    fontSize: 17,
+    fontWeight: '700',
+    color: Colors.textPrimary,
+  },
+  accountBadge: {
+    paddingHorizontal: 8,
+    paddingVertical: 2,
+    borderRadius: 8,
+  },
+  accountBadgeMember: {
+    backgroundColor: '#E8F5E9',
+  },
+  accountBadgeGuest: {
+    backgroundColor: '#F5F5F5',
+  },
+  accountBadgeText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: Colors.deepForest,
+  },
+  accountEmail: {
+    fontSize: 13,
+    color: Colors.textMuted,
+  },
+  accountActionDivider: {
+    height: 1,
+    backgroundColor: '#EEF5EE',
+    marginVertical: 14,
+  },
+  logoutBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+    paddingVertical: 8,
+  },
+  logoutBtnText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#D32F2F',
+  },
+  loginCtaBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: Colors.deepForest,
+    paddingVertical: 12,
+    borderRadius: 12,
+    ...Shadows.sm,
+  },
+  loginCtaBtnText: {
+    fontSize: 14,
+    fontWeight: '700',
+    color: '#FFFFFF',
   },
 });
