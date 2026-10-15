@@ -77,13 +77,21 @@ export default function PracticeScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
       >
-        {/* Screen Header */}
+        {/* Screen Header matching Lovable Practice */}
         <View style={styles.header}>
-          <Text style={styles.screenTitle}>{t('Yoga Sessions', 'योग सत्र')}</Text>
+          <View style={styles.eyebrowRow}>
+            <Ionicons name="leaf" size={13} color={Colors.primary} />
+            <Text style={styles.eyebrowText}>
+              {t('Find your rhythm', 'अपनी लय खोजें 🌿')}
+            </Text>
+          </View>
+          <Text style={styles.screenTitle}>
+            {t('A practice for every day.', 'हर दिन के लिए एक समर्पित योग सत्र।')}
+          </Text>
           <Text style={styles.screenSubtitle}>
             {t(
-              'Curated guided sequences with 3D animation and voice feedback',
-              '3D एनिमेशन और ध्वनि मार्गदर्शन से युक्त प्रामाणिक योग अभ्यास'
+              'Curated guided sequences with visual pose alignment and voice feedback.',
+              'दृश्य आसन संरेखण और ध्वनि मार्गदर्शन से युक्त प्रामाणिक योग अभ्यास।'
             )}
           </Text>
         </View>
@@ -221,12 +229,25 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
   },
   header: {
-    marginBottom: 20,
+    marginBottom: 16,
+  },
+  eyebrowRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 4,
+  },
+  eyebrowText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: Colors.primary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
   screenTitle: {
-    fontSize: 26,
-    fontWeight: '700',
-    color: Colors.deepForest,
+    fontSize: 24,
+    fontWeight: '800',
+    color: Colors.textPrimary,
     letterSpacing: -0.5,
   },
   screenSubtitle: {

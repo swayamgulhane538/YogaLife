@@ -156,11 +156,22 @@ export default function LibraryScreen() {
   return (
     <SafeAreaView style={styles.safeArea}>
       <View style={styles.container}>
-        {/* Screen Header */}
+        {/* Screen Header matching Lovable Postures */}
         <View style={styles.header}>
-          <Text style={styles.screenTitle}>{t('Asana Library', 'आसन संग्रह')}</Text>
+          <View style={styles.eyebrowRow}>
+            <Ionicons name="leaf" size={13} color={Colors.primary} />
+            <Text style={styles.eyebrowText}>
+              {t('Explore your possibilities', 'अपनी संभावनाएं खोजें 🌿')}
+            </Text>
+          </View>
+          <Text style={styles.screenTitle}>
+            {t('Every pose is a beginning.', 'प्रत्येक आसन एक नई शुरुआत है।')}
+          </Text>
           <Text style={styles.screenSubtitle}>
-            {filteredPoses.length} {t('Poses available', 'आसन उपलब्ध')}
+            {t(
+              'Learn the foundations. Find your alignment. Move with awareness, not perfection.',
+              'मूल सिद्धांतों को समझें। संरेखण खोजें। जागरूकता के साथ अभ्यास करें।'
+            )}
           </Text>
         </View>
 
@@ -169,7 +180,7 @@ export default function LibraryScreen() {
           <SearchBar
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder={t('Search by name or benefit...', 'नाम या लाभ द्वारा खोजें...')}
+            placeholder={t('Search a pose or Sanskrit name…', 'आसन या संस्कृत नाम से खोजें…')}
           />
         </View>
 
@@ -241,16 +252,30 @@ const styles = StyleSheet.create({
     paddingTop: Platform.OS === 'android' ? 36 : 12,
     marginBottom: 12,
   },
-  screenTitle: {
-    fontSize: 26,
+  eyebrowRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginBottom: 4,
+  },
+  eyebrowText: {
+    fontSize: 11,
     fontWeight: '700',
-    color: Colors.deepForest,
+    color: Colors.primary,
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
+  },
+  screenTitle: {
+    fontSize: 24,
+    fontWeight: '800',
+    color: Colors.textPrimary,
     letterSpacing: -0.5,
   },
   screenSubtitle: {
     fontSize: 13,
     color: Colors.textSecondary,
-    marginTop: 2,
+    lineHeight: 18,
+    marginTop: 4,
   },
   searchWrapper: {
     paddingHorizontal: 16,
