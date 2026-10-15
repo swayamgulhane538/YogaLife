@@ -16,7 +16,7 @@ import { Colors, Shadows } from '@/constants/theme';
 import { useLanguageStore } from '@/stores/languageStore';
 import { useProgressStore } from '@/stores/progressStore';
 import { useAuthStore } from '@/stores/authStore';
-import { yogaPoses, getPoseById } from '@/data/poses';
+import { yogaPoses, getPoseById, getPoseImage } from '@/data/poses';
 import { ThemedCard } from '@/components/ui/ThemedCard';
 import { PremiumButton } from '@/components/ui/PremiumButton';
 import { LanguageSelector } from '@/components/ui/LanguageSelector';
@@ -177,7 +177,11 @@ export default function HomeScreen() {
               </Text>
             </View>
             <View style={styles.dailyIconBox}>
-              <Ionicons name="body" size={38} color={Colors.deepForest} />
+              <Image
+                source={getPoseImage(dailyPose.id)}
+                style={styles.dailyPoseImg}
+                resizeMode="contain"
+              />
             </View>
           </View>
 
@@ -259,7 +263,11 @@ export default function HomeScreen() {
               activeOpacity={0.8}
             >
               <View style={styles.popularIconWrap}>
-                <Ionicons name="fitness" size={28} color={Colors.deepForest} />
+                <Image
+                  source={getPoseImage(pose.id)}
+                  style={styles.popularPoseImg}
+                  resizeMode="contain"
+                />
               </View>
               <Text style={styles.popularName} numberOfLines={1}>
                 {pose.sanskritName}
@@ -546,13 +554,21 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
   dailyIconBox: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
-    backgroundColor: Colors.softGreenBg,
+    width: 76,
+    height: 76,
+    borderRadius: 18,
+    backgroundColor: '#F3FAF3',
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 12,
+    borderWidth: 1,
+    borderColor: '#DFEADF',
+    overflow: 'hidden',
+    padding: 4,
+  },
+  dailyPoseImg: {
+    width: '100%',
+    height: '100%',
   },
   dailyActionRow: {
     flexDirection: 'row',
@@ -638,13 +654,21 @@ const styles = StyleSheet.create({
     borderColor: '#E8F0E8',
   },
   popularIconWrap: {
-    width: 44,
-    height: 44,
+    width: '100%',
+    height: 64,
     borderRadius: 12,
-    backgroundColor: Colors.softGreenBg,
+    backgroundColor: '#F3FAF3',
     alignItems: 'center',
     justifyContent: 'center',
-    marginBottom: 10,
+    marginBottom: 8,
+    borderWidth: 1,
+    borderColor: '#DFEADF',
+    overflow: 'hidden',
+    padding: 4,
+  },
+  popularPoseImg: {
+    width: '100%',
+    height: '100%',
   },
   popularName: {
     fontSize: 14,

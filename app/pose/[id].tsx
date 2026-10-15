@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Dimensions,
   Platform,
+  Image,
 } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,7 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors, Shadows } from '@/constants/theme';
 import { useLanguageStore } from '@/stores/languageStore';
 import { useFavoritesStore } from '@/stores/favoritesStore';
-import { getPoseById, yogaPoses } from '@/data/poses';
+import { getPoseById, yogaPoses, getPoseImage } from '@/data/poses';
 import { getInstructionsForPose, poseInstructions } from '@/data/instructions';
 import { YogaScene } from '@/components/3d/YogaScene';
 
@@ -222,6 +223,7 @@ export default function PoseDetailScreen() {
   const { isFavorite, toggleFavorite } = useFavoritesStore();
 
   const [activeTab, setActiveTab] = useState<DetailTab>('instructions');
+  const [viewMode, setViewMode] = useState<'photo' | '3d'>('photo');
 
   const pose = useMemo(() => {
     return getPoseById(id as string) || yogaPoses[0];
@@ -298,15 +300,68 @@ export default function PoseDetailScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* 3D Scene Interactive Preview */}
+        {/* View Mode Toggle: Real Pose Photo vs 3D Scene */}
+        <View style={styles.viewModeToggleRow}>
+          <TouchableOpacity
+            style={[styles.viewModeBtn, viewMode === 'photo' && styles.viewModeBtnActive]}
+            onPress={() => setViewMode('photo')}
+            activeOpacity={0.8}
+          >
+            <Ionicons
+              name="image-outline"
+              size={15}
+              color={viewMode === 'photo' ? '#FFFFFF' : Colors.deepForest}
+            />
+            <Text
+              style={[
+                styles.viewModeText,
+                viewMode === 'photo' && styles.viewModeTextActive,
+              ]}
+            >
+              {t('Pose Photo', 'आसन फोटो')}
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[styles.viewModeBtn, viewMode === '3d' && styles.viewModeBtnActive]}
+            onPress={() => setViewMode('3d')}
+            activeOpacity={0.8}
+          >
+            <Ionicons
+              name="cube-outline"
+              size={15}
+              color={viewMode === '3d' ? '#FFFFFF' : Colors.deepForest}
+            />
+            <Text
+              style={[
+                styles.viewModeText,
+                viewMode === '3d' && styles.viewModeTextActive,
+              ]}
+            >
+              {t('3D Interactive', '3D मॉडल')}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* Scene / Photo Interactive Preview */}
         <View style={[styles.sceneContainer, { height: SCENE_HEIGHT }]}>
-          <YogaScene
-            poseId={pose.id}
-            isPlaying={true}
-            speed={1.0}
-            showCameraControls={true}
-            style={styles.sceneCanvas}
-          />
+          {viewMode === 'photo' ? (
+            <View style={styles.photoContainer}>
+              <Image
+                source={getPoseImage(pose.id)}
+                style={styles.posePhoto}
+                resizeMode="contain"
+              />
+            </View>
+          ) : (
+            <YogaScene
+              poseId={pose.id}
+              isPlaying={true}
+              speed={1.0}
+              showCameraControls={true}
+              style={styles.sceneCanvas}
+            />
+          )}
         </View>
 
         {/* Tabs Bar */}
@@ -514,10 +569,54 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
     marginTop: 1,
   },
+  viewModeToggleRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    backgroundColor: '#F3FAF3',
+    borderBottomWidth: 1,
+    borderBottomColor: '#DFEADF',
+  },
+  viewModeBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 14,
+    borderRadius: 20,
+    backgroundColor: '#FFFFFF',
+    borderWidth: 1,
+    borderColor: '#C8DEC8',
+  },
+  viewModeBtnActive: {
+    backgroundColor: Colors.deepForest,
+    borderColor: Colors.deepForest,
+  },
+  viewModeText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: Colors.deepForest,
+  },
+  viewModeTextActive: {
+    color: '#FFFFFF',
+  },
   sceneContainer: {
     width: '100%',
     backgroundColor: '#FAF5ED',
     overflow: 'hidden',
+  },
+  photoContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#FFFFFF',
+    padding: 16,
+  },
+  posePhoto: {
+    width: '90%',
+    height: '90%',
   },
   sceneCanvas: {
     flex: 1,

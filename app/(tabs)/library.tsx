@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Platform,
   Dimensions,
+  Image,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,7 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors, Shadows } from '@/constants/theme';
 import { useLanguageStore } from '@/stores/languageStore';
 import { useFavoritesStore } from '@/stores/favoritesStore';
-import { yogaPoses, YogaPose } from '@/data/poses';
+import { yogaPoses, YogaPose, getPoseImage } from '@/data/poses';
 import { SearchBar } from '@/components/ui/SearchBar';
 import { FilterChips } from '@/components/ui/FilterChips';
 
@@ -120,9 +121,13 @@ export default function LibraryScreen() {
           </TouchableOpacity>
         </View>
 
-        {/* Pose Visual / Icon Box */}
+        {/* Pose Visual / Photo Box */}
         <View style={styles.poseIconBox}>
-          <Ionicons name="body-outline" size={36} color={Colors.deepForest} />
+          <Image
+            source={getPoseImage(item.id)}
+            style={styles.poseImage}
+            resizeMode="contain"
+          />
         </View>
 
         {/* Pose Titles */}
@@ -301,12 +306,20 @@ const styles = StyleSheet.create({
     padding: 2,
   },
   poseIconBox: {
-    height: 72,
-    backgroundColor: Colors.softGreenBg,
+    height: 96,
+    backgroundColor: '#F5FAF5',
     borderRadius: 12,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#DFEADF',
+    overflow: 'hidden',
+    padding: 6,
+  },
+  poseImage: {
+    width: '100%',
+    height: '100%',
   },
   sanskritTitle: {
     fontSize: 14,

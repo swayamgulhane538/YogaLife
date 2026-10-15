@@ -1,6 +1,6 @@
 /**
  * YogaLife App Poses Dataset
- * Comprehensive list of 15 essential yoga poses with metadata, tags, and search helpers.
+ * Comprehensive list of 15 essential yoga poses with metadata, tags, realistic photos, illustrations, and search helpers.
  */
 
 export type PoseCategory = 'standing' | 'seated' | 'supine' | 'prone' | 'inversion' | 'sequence';
@@ -16,7 +16,35 @@ export interface YogaPose {
   duration: number; // Duration in seconds
   isSequence: boolean;
   tags: string[];
-  icon: string; // MaterialCommunityIcons name
+  icon: string; // MaterialCommunityIcons or Ionicons name
+  thumbnailUrl: string; // Transparent anatomical pose visual
+  photoUrl: string; // Realistic high-definition pose photography
+}
+
+// Local offline bundled asset illustrations for 100% offline reliability & instant rendering
+export const poseLocalImages: Record<string, any> = {
+  tadasana: require('@/assets/poses/tadasana.png'),
+  vrikshasana: require('@/assets/poses/vrikshasana.png'),
+  bhujangasana: require('@/assets/poses/bhujangasana.png'),
+  balasana: require('@/assets/poses/balasana.png'),
+  trikonasana: require('@/assets/poses/trikonasana.png'),
+  vajrasana: require('@/assets/poses/vajrasana.png'),
+  'setu-bandhasana': require('@/assets/poses/setu-bandhasana.png'),
+  'adho-mukha-svanasana': require('@/assets/poses/adho-mukha-svanasana.png'),
+  sukhasana: require('@/assets/poses/sukhasana.png'),
+  shavasana: require('@/assets/poses/shavasana.png'),
+  'surya-namaskar': require('@/assets/poses/surya-namaskar.png'),
+  'virabhadrasana-1': require('@/assets/poses/virabhadrasana-1.png'),
+  'virabhadrasana-2': require('@/assets/poses/virabhadrasana-2.png'),
+  uttanasana: require('@/assets/poses/uttanasana.png'),
+  marjariasana: require('@/assets/poses/marjariasana.png'),
+};
+
+/**
+ * Helper to get local pose visual asset
+ */
+export function getPoseImage(id: string): any {
+  return poseLocalImages[id] || poseLocalImages['tadasana'];
 }
 
 export const yogaPoses: YogaPose[] = [
@@ -30,7 +58,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 45,
     isSequence: false,
     tags: ['foundation', 'posture', 'standing', 'balance', 'spine', 'alignment'],
-    icon: 'human-male-height',
+    icon: 'body',
+    thumbnailUrl: 'https://upload.wikimedia.org/wikipedia/commons/f/f2/Tadasana_-_Yoga_Art_and_Science.jpg',
+    photoUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'vrikshasana',
@@ -42,7 +72,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 60,
     isSequence: false,
     tags: ['balance', 'focus', 'standing', 'legs', 'hips', 'concentration'],
-    icon: 'tree',
+    icon: 'leaf',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483094/yoga-api/41_veknug.png',
+    photoUrl: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'bhujangasana',
@@ -54,7 +86,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 45,
     isSequence: false,
     tags: ['backbend', 'spine', 'chest', 'prone', 'flexibility', 'energy'],
-    icon: 'snake',
+    icon: 'flame',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483092/yoga-api/35_dytwvz.png',
+    photoUrl: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'balasana',
@@ -66,7 +100,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 60,
     isSequence: false,
     tags: ['resting', 'relaxation', 'calm', 'spine', 'hips', 'stress relief'],
-    icon: 'human-child',
+    icon: 'flower',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483079/yoga-api/10_wzpo85.png',
+    photoUrl: 'https://images.unsplash.com/photo-1599447421416-3414500d18a5?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'trikonasana',
@@ -78,7 +114,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 60,
     isSequence: false,
     tags: ['standing', 'flexibility', 'hamstrings', 'hips', 'side-body', 'balance'],
-    icon: 'triangle-outline',
+    icon: 'triangle',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483096/yoga-api/42_jawxqw.png',
+    photoUrl: 'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'vajrasana',
@@ -90,7 +128,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 60,
     isSequence: false,
     tags: ['digestion', 'seated', 'meditation', 'knees', 'posture', 'calm'],
-    icon: 'lightning-bolt',
+    icon: 'flash',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483091/yoga-api/31_ozseum.png',
+    photoUrl: 'https://images.unsplash.com/photo-1545205597-3d9d02c29597?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'setu-bandhasana',
@@ -102,7 +142,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 60,
     isSequence: false,
     tags: ['backbend', 'supine', 'glutes', 'spine', 'chest opener', 'circulation'],
-    icon: 'bridge',
+    icon: 'infinite',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483074/yoga-api/4_qq6nxw.png',
+    photoUrl: 'https://images.unsplash.com/photo-1599447292180-45fd84092dd4?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'adho-mukha-svanasana',
@@ -114,7 +156,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 60,
     isSequence: false,
     tags: ['inversion', 'hamstrings', 'shoulders', 'calves', 'energizing', 'core'],
-    icon: 'dog',
+    icon: 'paw',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483081/yoga-api/15_vkviqn.png',
+    photoUrl: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'sukhasana',
@@ -126,7 +170,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 120,
     isSequence: false,
     tags: ['meditation', 'seated', 'pranayama', 'calm', 'hip opener', 'relaxation'],
-    icon: 'meditation',
+    icon: 'sunny',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483091/yoga-api/31_ozseum.png',
+    photoUrl: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'shavasana',
@@ -138,7 +184,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 300,
     isSequence: false,
     tags: ['relaxation', 'supine', 'rest', 'mindfulness', 'cooling', 'recovery'],
-    icon: 'bed-outline',
+    icon: 'bed',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483078/yoga-api/11_dczyrp.png',
+    photoUrl: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'surya-namaskar',
@@ -150,7 +198,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 300,
     isSequence: true,
     tags: ['sequence', 'flow', 'full body', 'cardio', 'vitality', 'warmup', 'vinyasa'],
-    icon: 'weather-sunny',
+    icon: 'partly-sunny',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483095/yoga-api/39_hqj0sa.png',
+    photoUrl: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'virabhadrasana-1',
@@ -162,7 +212,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 60,
     isSequence: false,
     tags: ['standing', 'strength', 'legs', 'chest opener', 'focus', 'stamina'],
-    icon: 'sword',
+    icon: 'shield',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483096/yoga-api/44_dqeayo.png',
+    photoUrl: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'virabhadrasana-2',
@@ -174,7 +226,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 60,
     isSequence: false,
     tags: ['standing', 'strength', 'hips', 'stamina', 'arms', 'endurance'],
-    icon: 'human-handsup',
+    icon: 'fitness',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483096/yoga-api/45_ehimr1.png',
+    photoUrl: 'https://images.unsplash.com/photo-1575052814086-f385e2e2ad1b?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'uttanasana',
@@ -186,7 +240,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 45,
     isSequence: false,
     tags: ['standing', 'forward fold', 'hamstrings', 'spine', 'calm', 'flexibility'],
-    icon: 'human-male-board',
+    icon: 'arrow-down',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483093/yoga-api/38_yb3thk.png',
+    photoUrl: 'https://images.unsplash.com/photo-1599447421416-3414500d18a5?auto=format&fit=crop&w=800&q=80',
   },
   {
     id: 'marjariasana',
@@ -198,7 +254,9 @@ export const yogaPoses: YogaPose[] = [
     duration: 60,
     isSequence: false,
     tags: ['spine', 'warmup', 'back', 'neck', 'flexibility', 'core', 'prone'],
-    icon: 'cat',
+    icon: 'repeat',
+    thumbnailUrl: 'https://res.cloudinary.com/dko1be2jy/image/upload/fl_sanitize/v1676483075/yoga-api/7_a6aspg.png',
+    photoUrl: 'https://images.unsplash.com/photo-1599447292180-45fd84092dd4?auto=format&fit=crop&w=800&q=80',
   },
 ];
 

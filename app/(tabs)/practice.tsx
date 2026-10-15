@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   Platform,
   Alert,
+  Image,
 } from 'react-native';
 import { router } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -15,6 +16,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Colors, Shadows } from '@/constants/theme';
 import { useLanguageStore } from '@/stores/languageStore';
 import { yogaSessions, YogaSession } from '@/data/sessions';
+import { getPoseImage } from '@/data/poses';
 
 export default function PracticeScreen() {
   const { t, language } = useLanguageStore();
@@ -149,6 +151,24 @@ export default function PracticeScreen() {
                       </View>
                     </View>
                   </View>
+                </View>
+
+                {/* Pose Sequence Thumbnails */}
+                <View style={styles.poseThumbnailRow}>
+                  {session.poseSequence.slice(0, 5).map((poseId, pIdx) => (
+                    <View key={`${poseId}-${pIdx}`} style={styles.miniThumbWrap}>
+                      <Image
+                        source={getPoseImage(poseId)}
+                        style={styles.miniThumbImg}
+                        resizeMode="contain"
+                      />
+                    </View>
+                  ))}
+                  {session.poseSequence.length > 5 && (
+                    <View style={styles.morePosesBadge}>
+                      <Text style={styles.morePosesText}>+{session.poseSequence.length - 5}</Text>
+                    </View>
+                  )}
                 </View>
 
                 {/* Bottom Card Action */}
@@ -296,6 +316,40 @@ const styles = StyleSheet.create({
     borderRadius: 2,
     backgroundColor: '#C5D6C5',
     marginHorizontal: 8,
+  },
+  poseThumbnailRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 10,
+    marginBottom: 4,
+  },
+  miniThumbWrap: {
+    width: 38,
+    height: 38,
+    borderRadius: 8,
+    backgroundColor: '#F5FAF5',
+    borderWidth: 1,
+    borderColor: '#DFEADF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+    padding: 2,
+  },
+  miniThumbImg: {
+    width: '100%',
+    height: '100%',
+  },
+  morePosesBadge: {
+    paddingHorizontal: 7,
+    paddingVertical: 4,
+    borderRadius: 8,
+    backgroundColor: '#E8F5E9',
+  },
+  morePosesText: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: Colors.deepForest,
   },
   cardAction: {
     flexDirection: 'row',
